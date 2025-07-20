@@ -1,17 +1,98 @@
 #!/bin/bash
+#
+# This script scans the log folders and interacts with journalctl
+# to collect issues about the system, then uploads the log data
+# to a handling server for further processing. If logs are found,
+# this script will also include a report gathering system information
+# to aid with troubleshooting.
+#
+# Author: Chris Mayenschein
+# GitHub: https://github.com/cmayen/paila
+# Date: 2025-07-20
+# Last Modified: 2025-07-20
+#
+# Usage: ./paila-logpush.sh
+# Usage: ./paila-logpush.sh [-u output_url] [-d out_directory] [-l log_directory]
+# Example: paila-logpush.sh -u http://localhost:8181/uploadlog -l /var/log
+#
+################################################################################
+
+
+# curl http file push location
+# check for PAILA_OUTURL environment variable
+if [[ -z "${PAILA_OUTURL}" ]]; then
+  # not defined, set default
+  OUTPUTURL="http://localhost:8181/uploadlog"
+else
+  OUTPUTURL="${PAILA_OUTURL}"
+fi
+
+
+# log file generation location
+# check for PAILA_OUTDIR environment variable
+if [[ -z "${PAILA_OUTDIR}" ]]; then
+  # not defined, set default
+  OUTPUTDIR="/var/tmp"
+else
+  OUTPUTDIR="${PAILA_OUTDIR}"
+fi
+
+
+# system log directory location
+# check for PAILA_LOGDIR environment variable
+if [[ -z "${PAILA_LOGDIR}" ]]; then
+  # not defined, set default
+  LOGDIR="/var/log"
+else
+  LOGDIR="${PAILA_LOGDIR}"
+fi
+
+
+# get passed in options
+# passed options will override env variables
+#   'u:' output url
+#   'd:' output directory
+#   'l:' log directory
+while getopts "u:d:l:" opt; do
+  case $opt in
+
+    u) # output url curl with call to
+      OUTPUTURL=$OPTARG;;
+
+    d) # output directory for generated file
+      OUTPUTDIR=$OPTARG;;
+
+    l) # log directory containing the logs to scan
+      LOGDIR=$OPTARG;;
+
+    \?) # Handle invalid options
+      echo "Usage: $0 [-u output_url] [-d out_directory] [-l log_directory]" >&2
+      exit 1;;
+  esac
+done
+
+
+# make sure the output and log directories end with a trailing /
+if [[ "$OUTPUTDIR" != */ ]]; then
+  # If not, append /
+  OUTPUTDIR="${OUTPUTDIR}/"
+fi
+if [[ "$LOGDIR" != */ ]]; then
+  # If not, append /
+  LOGDIR="${LOGDIR}/"
+fi
+
+
+# debug
+#echo -e "\nOUTPUTURL=${OUTPUTURL}"
+#echo -e "OUTPUTDIR=${OUTPUTDIR}"
+#echo -e "LOGDIR   =${LOGDIR}"
+#exit
+
 
 # allows the last command in a pipeline to run in the current shell,
 # thus allowing variable changes within a while loop to persist
 shopt -s lastpipe # Enable lastpipe option
-
-# curl http file push location
-OUTPUTURL="http://localhost:8181/uploadlog"
-
-# todo : check for env variable to override OUTPUTURL
-# todo : check for bash argv to override OUTPUTURL
-# todo : --help
-
-
 
 
 # setup some date objects for filtering and naming
@@ -19,23 +100,28 @@ DATE_S=$(date --date="yesterday"  +"%Y-%m-%d")
 DATE_Y=$(date --date="yesterday"  +"%Y-%m-%d 00:00:00")
 DATE_T=$(date --date="today"  +"%Y-%m-%d 00:00:00")
 
+
 # regex pattern match for date string existance
 DATE_P="[0-9]{4}-[0-9]{2}-[0-9]{2}"
 
-# set the log dir and scan it
-LOG_DIR="/var/log"
-LOG_FILES=$(find $LOG_DIR -name "*.log" -mtime -3)
+
+# scan the log dir
+LOG_FILES=$(find $LOGDIR -name "*.log" -mtime -3)
+
 
 # determine the hostname
 HOST=$(cat /etc/hostname)
 
+
 # set output path for generated report file
-OUTPUTPATH="${HOST}--${DATE_S}.report.txt"
+OUTPUTPATH="${OUTPUTDIR}${HOST}--${DATE_S}.report.txt"
+
 
 # init logsfound to 0, change to 1 if anything comes up
 # so the script will either gather further system information
 # or generate a "good health" report
 LOGSFOUND=0
+
 
 # a generic header for the logged issues
 echo -e "\n============================================" > "${OUTPUTPATH}"
@@ -44,19 +130,29 @@ echo -e "= Host: ${HOST}" >> "${OUTPUTPATH}"
 echo -e "= Date: ${DATE_S}" >> "${OUTPUTPATH}"
 echo -e "============================================" >> "${OUTPUTPATH}"
 
+
+# loop the found log files
 for LOGFILE in $LOG_FILES; do
+
 
   # get 1 possible error back from the file, this content will
   # be used to determine whether to dig deeper, and to check if
   # a date format is available to filter by
   grep -Eiw -m 1 "warning|error|critical|alert|fatal" $LOGFILE | while read -r checkline; do
+
+
     # check if a date filter can be used
     if [[ "$checkline" =~ $DATE_P ]]; then
+
+
       # date is available for filtering, get a count of the errors with the new filter applied
       LOGCOUNT=$(grep -Eiw "warning|error|critical|alert|fatal" $LOGFILE | grep -c "$DATE_S")
-      # todo : should be > 0
-      if [ "$LOGCOUNT" -gt 1 ]; then
+
+
+      # if the count is greater than 0 then there are logs to report
+      if [ "$LOGCOUNT" -gt 0 ]; then
         LOGSFOUND=1
+
         # date filtered log entries exist
         echo -e "\n======================" >> "${OUTPUTPATH}"
         echo -e "======================" >> "${OUTPUTPATH}"
@@ -134,9 +230,9 @@ if [ "$LOGSFOUND" -eq 1 ]; then
   echo -e "= Date: ${DATE_S}" >> "${OUTPUTPATH}"
   echo -e "============================================" >> "${OUTPUTPATH}"
 
-  # double quotes around "${array[@]}" are really important. Without them, the for loop 
-  # will break up the array by substrings separated by spaces within the strings instead
-  # of by the whole string elements
+  # double quotes around "${array[@]}" are really important. Without 
+  # them, the for loop will break up the array by substrings separated 
+  # by spaces within the strings instead of by the whole string elements
   for COMMAND in "${COMMANDS[@]}"; do
 
     # run it
@@ -160,16 +256,27 @@ if [ "$LOGSFOUND" -eq 1 ]; then
 fi
 
 
+# use curl to upload the log data file to the server
 CURLRESP=$(curl -F "host=${HOST}" -F "date=${DATE_S}" -F "log=@${OUTPUTPATH}" "${OUTPUTURL}")
 
 
+# check the json response for 201 status text
 if [[ "$CURLRESP" == *"\"status\":\"201\""* ]]; then
-  # perform cleanup
-  echo -e "\n response is 201"
-  rm "${OUTPUTPATH}"
+  # if OUTPUTDIR == /var/tmp/ then the file should be deleted on success
+  # otherwise leave it in place
+  if [[ "$OUTPUTDIR" == "/var/tmp/"  ]]; then
+    # perform cleanup
+    rm "${OUTPUTPATH}"
+  fi
+
 else
+  echo -e "\nError:"
   echo -e "\n${CURLRESP}"
+  # exit fail
   exit 1
 fi
 
+
+# exit success
 exit 0
+
