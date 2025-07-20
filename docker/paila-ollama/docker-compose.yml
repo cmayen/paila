@@ -1,0 +1,19 @@
+services:
+  ollama:
+    image: ollama/ollama:rocm
+    restart: unless-stopped
+    container_name: paila-ollama
+    devices:
+      - "/dev/kfd:/dev/kfd"
+      - "/dev/dri:/dev/dri"
+    network_mode: "bridge"
+    ports:
+      - "11434:11434"
+    environment:
+      - "OLLAMA_HOST=0.0.0.0:11434"
+      - "OLLAMA_ORIGINS=*"
+    volumes:
+      - ollama_data:/root/.ollama
+volumes:
+  ollama_data:
+
