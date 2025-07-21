@@ -90,8 +90,8 @@ func uploadHandler(w http.ResponseWriter, r *http.Request) {
 	dateR := r.FormValue("date")
 
 	// sanitizing
-	// remove all non-alphanumeric characters except spaces
-	reg := regexp.MustCompile(`[^a-zA-Z0-9\s]`)
+	// remove all non-alphanumeric characters except hyphens and periods
+	reg := regexp.MustCompile(`[^a-zA-Z0-9.-]`)
 	host := reg.ReplaceAllString(hostR, "")
 	date := reg.ReplaceAllString(dateR, "")
 
