@@ -18,7 +18,7 @@ This project is in its infancy, so there will be many changes as areas are compl
 
 #### paila-ollama
 
-The AI / LLM ollama container built with the ollama/ollama:rocm image in order to work with AMD chipsets. (nvidia will be added later.)
+The AI / LLM ollama container built with the ollama/ollama:rocm image in order to work with AMD chipsets, and should use the ollama/ollama:latest for NVIDIA chipsets.
 
 
 #### paila-ingest
