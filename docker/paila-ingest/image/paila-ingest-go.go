@@ -1,3 +1,16 @@
+//
+// This go project runs a http server that acts as the ingest for all log
+// and spec files sent to it and queues the files for AI processing.
+//
+// Author: Chris Mayenschein
+// GitHub: https://github.com/cmayen/paila
+// Date: 2025-07-20
+// Last Modified: 2025-07-20
+//
+// Usage: ./paila-ingest-go
+//
+// #############################################################################
+
 package main
 
 import (

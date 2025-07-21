@@ -8,9 +8,11 @@ A smart agent tool that watches systems, understands logs, finds problems, and s
 ---
 
 
+
 ### Docker Containers
 paila-ollama-rocm
 paila-ingest
+
 
 
 ### Log Discovery Tool
