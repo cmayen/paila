@@ -7,6 +7,12 @@ A smart agent tool that watches systems, understands logs, finds problems, and s
 
 ---
 
+### Docker Containers
+palia-ollama-rocm
+palia-ingest
 
+
+### Log Discovery Tool
+palia-logpush.sh
 
 

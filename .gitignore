@@ -1,0 +1,4 @@
+
+# ignore saved paila-ingest-image .tar.gz files
+docker/paila-ingest/image/*.tar.gz
+

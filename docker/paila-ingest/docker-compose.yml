@@ -1,0 +1,21 @@
+services:
+  paila-ingest:
+    #image: @cmayen/paila-ingest:v0-0-1
+    image: paila-ingest:latest
+    restart: unless-stopped
+    container_name: paila-ingest
+    command: "./paila-ingest-go"
+    #devices:
+    #  - "/dev/kfd:/dev/kfd"
+    #  - "/dev/dri:/dev/dri"
+    network_mode: "bridge"
+    ports:
+      - "8181:8181"
+    environment:
+      - "PAILA_INGEST_PORT=8181"
+    #  - "PAILA_ORIGINS=*"
+    volumes:
+      - paila_ingest_data:/.paila-ingest
+volumes:
+  paila_ingest_data:
+
