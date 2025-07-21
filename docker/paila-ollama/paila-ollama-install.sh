@@ -8,7 +8,7 @@
 # Date: 2025-07-20
 # Last Modified: 2025-07-20
 #
-# Usage: ./paila-ollama-rocm-install.sh
+# Usage: ./paila-ollama-install.sh
 #
 ################################################################################
 

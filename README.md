@@ -8,8 +8,7 @@ A smart agent tool that watches systems, understands logs, finds problems, and s
 ---
 
 2025-07-21
-This project is in its infancy, so there will be many changes as areas are completed.
-
+This project is in its infancy, so there will be many changes as areas are completed. At the moment this project is in prototpe phase and being developed in a secure environment. Further security precautions and checks will be integrated as development progresses.
 
 ---
 

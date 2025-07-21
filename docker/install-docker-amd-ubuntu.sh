@@ -7,9 +7,9 @@
 # Author: Chris Mayenschein
 # GitHub: https://github.com/cmayen/paila
 # Date: 2025-07-20
-# Last Modified: 2025-07-20
+# Last Modified: 2025-07-21
 #
-# Usage: ./install_docker_ubuntu.sh
+# Usage: ./install-docker-amd-ubuntu.sh
 #
 ################################################################################
 
@@ -20,8 +20,13 @@ sudo apt update -y && sudo apt upgrade -y
 
 # Retrieve the docker and jq packages. It would be a good idea to have an 
 # editor like vim, also ensure wget is installed, and gpg will be needed 
-# for keys. One call sounds good for all of them.
-sudo apt install -y docker.io jq vim wget gpg
+# for keys. Also need docker-compose-v2 One call sounds good for all of them.
+sudo apt install -y docker.io jq vim wget gpg docker-compose-v2
+
+
+#
+# https://instinct.docs.amd.com/projects/container-toolkit/en/latest/container-runtime/quick-start-guide.html
+#
 
 
 # Get the AMD GPU installer package from the radeon repo and install 
@@ -49,8 +54,8 @@ echo "deb [arch=amd64 signed-by=/etc/apt/keyrings/rocm.gpg] https://repo.radeon.
 sudo apt update -y && sudo apt upgrade -y
 
 
-# Install the amd-container-toolkit and docker-compose-v2
-sudo apt install amd-container-toolkit docker-compose-v2
+# Install the amd-container-toolkit
+sudo apt install amd-container-toolkit
 
 
 # Configure the runtime, and restart docker.
