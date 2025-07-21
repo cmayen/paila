@@ -83,13 +83,6 @@ if [[ "$LOGDIR" != */ ]]; then
 fi
 
 
-# debug
-#echo -e "\nOUTPUTURL=${OUTPUTURL}"
-#echo -e "OUTPUTDIR=${OUTPUTDIR}"
-#echo -e "LOGDIR   =${LOGDIR}"
-#exit
-
-
 # allows the last command in a pipeline to run in the current shell,
 # thus allowing variable changes within a while loop to persist
 shopt -s lastpipe # Enable lastpipe option
