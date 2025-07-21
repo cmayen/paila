@@ -14,17 +14,17 @@ This project is in its infancy, so there will be many changes as areas are compl
 ---
 
 
-## Running Docker Containers
+## Docker Containers
 
 
 #### paila-ollama
 
-The AI / LLM ollama container built with rocm in order to work with AMD chipsets. (nvidia will be added later.)
+The AI / LLM ollama container built with the ollama/ollama:rocm image in order to work with AMD chipsets. (nvidia will be added later.)
 
 
 #### paila-ingest
 
-The ingest server that will receive log files from remote machines and queue the files for AI analysis.
+The ingest server that will receive log files from remote machines running the paila-logpush.sh shell script and queue the files for AI analysis.
 
 
 ---
