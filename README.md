@@ -43,6 +43,4 @@ Shell script copied to remote servers that filters log files and interacts with 
 
 
 
-
-
-
+![image of web ui report](https://github.com/cmayen/paila/blob/main/.readme-assets/paila-250722.png?raw=true)
