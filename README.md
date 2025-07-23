@@ -26,6 +26,11 @@ The AI / LLM ollama container built with the ollama/ollama:rocm image in order t
 The ingest server that will receive log files from remote machines running the paila-logpush.sh shell script and queue the files for AI analysis.
 
 
+#### paila-reporter
+
+The reporter server calls for AI analysis and provides a web interface.
+
+
 ---
 
 
