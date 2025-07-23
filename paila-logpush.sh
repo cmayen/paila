@@ -152,7 +152,7 @@ for LOGFILE in $LOG_FILES; do
         echo -e "=== Log: ${LOGFILE}" >> "${OUTPUTPATH}"
         echo -e "=======" >> "${OUTPUTPATH}"
         # do the output search
-        grep -Eiw "warning|error|critical|alert|fatal" $LOGFILE | grep "$DATE_S" | sort -u | while read -r line; do
+        grep -Eiw "warning|error|critical|alert|fatal" $LOGFILE | grep "$DATE_S" | sort -u | uniq -u | while read -r line; do
           #
           echo "${line}" >> "${OUTPUTPATH}"
           #
@@ -165,7 +165,7 @@ for LOGFILE in $LOG_FILES; do
       echo -e "======================" >> "${OUTPUTPATH}"
       echo -e "=== Log: ${LOGFILE}" >> "${OUTPUTPATH}"
       echo -e "=======" >> "${OUTPUTPATH}"
-      grep -Eiw "warning|error|critical|alert|fatal" $LOGFILE | sort -u | while read -r line; do
+      grep -Eiw "warning|error|critical|alert|fatal" $LOGFILE | sort -u | uniq -u | while read -r line; do
         #
         echo "$line" >> "${OUTPUTPATH}"
         #
@@ -178,7 +178,13 @@ done
 # Call to journalctl requesting critical information from yesterday.
 # store the data in a value so we can suppress the log header if there
 # is nothing returned
-JCTL=$(journalctl -S "$DATE_Y" -U "$DATE_T" --no-pager --priority=3..0)
+# -o cat is used to suppress the date to allow for filtering unique entries
+# --no-pager is used to suppress the pager output, so we can capture the output
+# --priority=3..0 is used to filter for critical, alert, error, and warning
+# the sort -u and uniq -u are used to filter out duplicate entries
+# this will only return unique entries, so if there are no entries, it will return
+# "-- No entries --" or an empty string
+JCTL=$(journalctl -S "$DATE_Y" -U "$DATE_T" -o cat --no-pager --priority=3..0 | sort -u | uniq -u)
 # check for no entries response
 if [[ ! "$JCTL" == "-- No entries --" ]] && [[ ! "$JCTL" == "" ]]; then
   # we have entries, send the header and LOGSFOUND
