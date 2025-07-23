@@ -8,7 +8,7 @@ A smart tool that watches systems, understands logs, finds problems, and suggest
 ---
 
 2025-07-21
-This project is in its infancy, so there will be many changes as areas are completed. At the moment this project is in prototpe phase and being developed in a secure environment. Further security precautions and checks will be integrated as development progresses.
+This part time project is in its infancy, so there will be many changes as areas are completed. Things may get ugly. At the moment this project is in prototpe phase and being developed in a secure environment. Further security precautions and checks will be integrated as development progresses.
 
 ---
 
@@ -28,7 +28,7 @@ The ingest server that will receive log files from remote machines running the p
 
 #### paila-reporter
 
-The reporter server calls for AI analysis and provides a web interface.
+The reporter server calls for AI analysis and provides a web interface. View logs, reports, and ability to manually re-generate reports.
 
 
 ---
@@ -38,9 +38,10 @@ The reporter server calls for AI analysis and provides a web interface.
 
 #### paila-logpush.sh
 
-Shell script copied to remote servers that filters log files and interacts with journalctl (if present) to generate and upload an ingest file for the paila-ingest server containing information about the previous day.
+Shell script copied to remote servers that filters log files for unique entries and interacts with journalctl (if present) to generate and upload an ingest file for the paila-ingest server containing information about the previous day.
 
 
+---
 
 
 ![image of web ui report](https://github.com/cmayen/paila/blob/main/.readme-assets/paila-250722.png?raw=true)
