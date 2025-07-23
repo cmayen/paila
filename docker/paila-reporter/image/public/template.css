@@ -1,0 +1,432 @@
+
+
+
+/* Reset */
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+
+:root{
+    /*Set default theme values */
+    --bg-color: #111;
+    --color: #ddd;
+    --a-color:#48d;
+    --shadow-color: #000;
+    --scroll-thumb-color: #555;
+    --selection-highlight-color: #ddd;
+    --selection-highlight-bg-color: #555;
+
+    --bp-bg-color:#222;
+    --bp-border-tl-color:#444;
+    --bp-border-br-color:#111;
+
+    /*Set dark theme values */
+    --dark-bg-color: #111;
+    --dark-color: #ddd;
+    --dark-a-color:#48d;
+    --dark-bp-bg-color:#222;
+    --dark-bp-border-tl-color:#444;
+    --dark-bp-border-br-color:#111;
+
+    /*Set light theme values */
+    --light-bg-color: #eee;
+    --light-color: #222;
+    --light-a-color:#048;
+    --light-bp-bg-color:#ccc;
+    --light-bp-border-tl-color:#fff;
+    --light-bp-border-br-color:#888;
+}
+
+/*
+    setup the main theme variables based on the dark theme
+*/
+html[data-theme="dark"]{
+    --bg-color: var(--dark-bg-color);
+    --color: var(--dark-color);
+    --a-color: var(--dark-a-color);
+    --bp-bg-color: var(--dark-bp-bg-color);
+    --bp-border-tl-color: var(--dark-bp-border-tl-color);
+    --bp-border-br-color: var(--dark-bp-border-br-color);
+    /* Adjust the positioning and grayscale for the theme toggle icons */
+    #theme-toggle>.cs-sun{left:16px;z-index:1;filter:grayscale(100%);}
+    #theme-toggle>.cs-moon{left:0px;z-index:2;filter:grayscale(0%);}
+}
+
+/*
+    setup the main theme variables based on the light theme
+*/
+html[data-theme="light"]{
+    --bg-color: var(--light-bg-color);
+    --color: var(--light-color);
+    --a-color: var(--light-a-color);
+    --bp-bg-color: var(--light-bp-bg-color);
+    --bp-border-tl-color: var(--light-bp-border-tl-color);
+    --bp-border-br-color: var(--light-bp-border-br-color);
+    /* Adjust the positioning and grayscale for the theme toggle icons */
+    #theme-toggle>.cs-sun{left:0px;z-index:2;filter:grayscale(0%);}
+    #theme-toggle>.cs-moon{left:16px;z-index:1;filter:grayscale(100%);}
+}
+
+hr {
+  border: none; /* Removes the default border */
+  height: 2px; /* Sets the thickness of the line */
+  background-color: var(--bp-bg-color); /* Sets the color of the line to red */
+}
+
+/*
+setup the css for the theme toggler elements
+*/
+#theme-toggle{
+    display:inline-block;height:32px;width:50px; overflow:hidden;position:relative;
+}
+#theme-toggle>.cs-sun , #theme-toggle>.cs-moon {
+    position:absolute;width:32px;height:32px;z-index:2;
+    transition: left 1s ease-in-out;/* NICE! */
+}
+#theme-toggle>.cs-sun{left:0px; z-index:2;transform:scale(0.8);}
+#theme-toggle>.cs-moon{left:16px; z-index:1;filter:grayscale(100%);}
+
+/*
+    setup the css for the loading overlay and progress bar
+    This is used to show a loading overlay while the page is loading.
+    The progress bar is used to show the loading progress (faked).
+*/
+#loading-overlay {
+    position:absolute;top:0px;left:0px;width:100%;height:100%;z-index: 99;
+    background-color: var(--bg-color); opacity: 1;
+}
+#loading-overlay progress {
+    position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);
+}
+
+
+
+
+/*
+    use the theme variables to set rest of the page styles
+*/
+html,body{
+    padding:0px;margin:0px;width:100%; height:100%;
+    box-sizing: border-box;
+    background-color: var(--bg-color);
+    color: var(--color);
+    transition: background-color 0.42s ease-in-out;
+    font-family:Roboto, sans-serif;
+    font-size: 17px;
+    letter-spacing:0.2px;
+}
+a{
+    color: var(--a-color);
+    text-decoration: none;
+}
+a:hover{
+    text-decoration: underline;
+}
+
+a.textlink{color:var(--color);}
+a.textlink:hover{text-decoration: none;}
+
+
+
+a.header-zak-img{
+    height:28px;width:28px; margin-left:10px;margin-right:10px;
+}
+a.header-zak-img>img{
+    height:28px;width:28px;border-radius:50%;box-shadow:0 0 5px var(--shadow-color);
+}
+
+
+
+body>header>div
+,body>main>div
+,body>footer>div
+{
+    max-width:1150px;margin:0 auto;
+}
+
+
+html{
+  scrollbar-color: var(--scroll-thumb-color) var(--bg-color);
+  scrollbar-width: thin;
+  transition: scrollbar-color 0.4s ease-in-out, color 0.4s ease-in-out;
+}
+
+
+
+
+body>header{
+	box-shadow:0 0 10px var(--shadow-color);
+	height:36px;overflow:visible;
+}
+body>header>div{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+	height:36px;overflow:visible;
+    padding-left:10px;padding-right:10px;
+}
+
+
+
+body>header>div div>nav>div{
+    display: inline-block;
+}
+body>header>div div>nav>div>a 
+,div.nav-links-foot>a 
+{
+    display:inline-block;
+    padding: 0.5em 1em;
+    margin: 0 0.2em;
+    border-radius: 4px;
+    transition: background-color 0.3s ease-in-out, color 0.3s ease-in-out;
+}
+body>header>div div>nav>div>a:hover{
+    background-color: var(--a-color);
+    color: var(--bg-color);
+}
+body>header>div>div>nav{position:relative;}
+
+
+
+
+
+body>footer>div{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    font-size:80%;
+    margin-top:50px;margin-bottom:50px;
+    padding-top:20px;padding-bottom:20px;
+    border-top:1px solid var(--shadow-color);
+}
+div.copyright{padding-left:20px;}
+div.nav-links-foot{
+    padding-right:10px;
+    text-align: right;
+}
+div.nav-links-foot>a {padding-left:10px;padding-right:10px;}
+
+
+
+
+
+
+body>main>div{
+    max-width:1150px;margin:0 auto;
+    padding:20px;
+}
+
+
+ul{
+    margin-left:12px;
+}
+li{
+    margin-left:12px;
+}
+
+
+
+
+
+
+
+
+
+
+@media (min-width: 770px) {
+    .hamb-wrapper {
+        display: none; /* Hide the hamburger menu on larger screens */
+    }
+    .nav-links > a {
+        display: inline-block; /* Show the links inline on larger screens */
+        padding: 0.5em 1em;
+        margin: 0 0.2em;
+        border-radius: 4px;
+        transition: background-color 0.3s ease-in-out, color 0.3s ease-in-out;  
+    }
+}    
+@media (max-width: 770px) {
+    .hamb-wrapper {
+        display: block; /* Show the hamburger menu on smaller screens */
+    }
+    .nav-links {
+        display: none; /* Hide the links on smaller screens */
+		position:absolute;right:10px;top:62px;
+		background:#151515;
+		box-shadow:0 0 10px var(--shadow-color);
+    }
+    .nav-links a , .nav-links > a.medium-screen {
+        display:block;
+    }
+
+}
+@media (max-width: 860px) and (min-width: 770px) {
+    .nav-links > a.medium-screen {
+        display: none;
+    }
+}
+
+
+
+/* Menu Icon */
+.hamb{
+    cursor: pointer;
+    float: right;
+    padding: 40px 20px;
+}/* Style label tag */
+
+.hamb-line {
+    background: var(--color);
+    display: block;
+    height: 2px;
+    position: relative;
+    width: 24px;
+
+} /* Style span tag */
+
+.hamb-line::before,
+.hamb-line::after{
+    background: var(--color);
+    content: ' ';
+    display: block;
+    height: 100%;
+    position: absolute;
+    transition: all .2s ease-out;
+    width: 100%;
+}
+.hamb-line::before{
+    top: 10px;
+}
+.hamb-line::after{
+    top: -10px;
+}
+.hamb-wrapper input.side-menu {
+    display: none; /* Hide the checkbox */
+}
+
+
+
+/* Toggle menu icon */
+.side-menu:checked ~ .hamb .hamb-line {
+    background: transparent;
+}
+.side-menu:checked ~ .hamb .hamb-line::before {
+    transform: rotate(-45deg);
+    top:0;
+}
+.side-menu:checked ~ .hamb .hamb-line::after {
+    transform: rotate(45deg);
+    top:0;
+}
+
+
+
+
+
+/* 
+disable the overflow so the menu does not scroll the page on accident when oopen 
+this is only a thing if the header is fixed
+*/
+body:has(.side-menu:checked) {
+  /* overflow: hidden; */
+  /* show menu */
+  .nav-links {
+    display:block !important;
+  }
+}
+
+
+
+
+a.back-to-top{
+    margin-right:20px;width:42px;height:42px;box-shadow:0 0 5px var(--shadow-color);border-radius:50%;
+    font-size:32px;display:inline-block;text-align: center; vertical-align: middle;
+}
+a.back-to-top:hover{
+    box-shadow:0 0 5px var(--a-color);
+    text-decoration: none;
+}
+
+
+
+
+div.browser-preview{
+    box-shadow:2px 2px 10px var(--shadow-color);
+    padding:10px;padding-top:0px;
+    background-color:var(--bp-bg-color);
+    border-radius:3px;
+    
+    border-top:1px solid var(--bp-border-tl-color);
+    border-left:1px solid var(--bp-border-tl-color);
+    border-bottom:1px solid var(--bp-border-br-color);
+    border-right:1px solid var(--bp-border-br-color);
+
+}
+div.browser-preview::before {
+  content:'● ● ●';
+}
+div.browser-preview-content{
+    box-shadow:inset 0px 0px 5px var(--shadow-color);
+}
+
+
+
+
+
+
+
+
+
+
+div.series-links{display: flex; flex-direction: row;justify-content: space-between;margin-top:50px;}
+
+div.series-links a{position:relative;}
+div.series-links a span {
+    display:inline-block;
+    width:42px;height:42px;
+    border-radius: 50%;
+    box-shadow: 0 0 10px var(--shadow-color);
+    font-size:32px;
+    text-align: center;
+    position:relative;top:3px;
+}
+
+div.series-links a:hover span {
+    box-shadow: 0 0 10px var(--a-color);
+}
+
+
+
+
+#paila_log_content{
+    margin-top:42px;
+}
+#paila_log_content>span[id]{
+    cursor: pointer;
+}
+
+#paila_log_tab_content{
+    border-top:2px solid var(--shadow-color);
+}
+
+
+#paila_content_log, #paila_content_specs, #paila_content_report{
+    display:none;
+}
+
+#paila_content_logs>pre, #paila_content_specs>pre,#paila_content_report>pre{
+    font-size: 70%; white-space: pre-wrap;
+    margin-top:21px;
+}
+
+
+div.no-report-message-generate{
+    margin-top:42px; text-align: center;
+}
+
+#paila_content_report{
+    padding-top:21px;
+}

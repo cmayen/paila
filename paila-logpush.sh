@@ -9,7 +9,7 @@
 # Author: Chris Mayenschein
 # GitHub: https://github.com/cmayen/paila
 # Date: 2025-07-20
-# Last Modified: 2025-07-20
+# Last Modified: 2025-07-23
 #
 # Usage: ./paila-logpush.sh
 # Usage: ./paila-logpush.sh [-u output_url] [-d out_directory] [-l log_directory]
@@ -106,13 +106,13 @@ LOG_FILES=$(find $LOGDIR -name "*.log" -mtime -3)
 HOST=$(cat /etc/hostname)
 
 
-# set output path for generated report file
-OUTPUTPATH="${OUTPUTDIR}${HOST}--${DATE_S}.report.txt"
+# set output path for generated logs file
+OUTPUTPATH="${OUTPUTDIR}${HOST}--${DATE_S}.logs.txt"
 
 
 # init logsfound to 0, change to 1 if anything comes up
 # so the script will either gather further system information
-# or generate a "good health" report
+# or generate a "good health" report in the logs file
 LOGSFOUND=0
 
 
@@ -152,7 +152,7 @@ for LOGFILE in $LOG_FILES; do
         echo -e "=== Log: ${LOGFILE}" >> "${OUTPUTPATH}"
         echo -e "=======" >> "${OUTPUTPATH}"
         # do the output search
-        grep -Eiw "warning|error|critical|alert|fatal" $LOGFILE | grep "$DATE_S" | while read -r line; do
+        grep -Eiw "warning|error|critical|alert|fatal" $LOGFILE | grep "$DATE_S" | sort -u | while read -r line; do
           #
           echo "${line}" >> "${OUTPUTPATH}"
           #
@@ -165,7 +165,7 @@ for LOGFILE in $LOG_FILES; do
       echo -e "======================" >> "${OUTPUTPATH}"
       echo -e "=== Log: ${LOGFILE}" >> "${OUTPUTPATH}"
       echo -e "=======" >> "${OUTPUTPATH}"
-      grep -Eiw "warning|error|critical|alert|fatal" $LOGFILE | while read -r line; do
+      grep -Eiw "warning|error|critical|alert|fatal" $LOGFILE | sort -u | while read -r line; do
         #
         echo "$line" >> "${OUTPUTPATH}"
         #
@@ -200,8 +200,11 @@ echo -e "\n============================================" >> "${OUTPUTPATH}"
 echo -e "= End Logged Issues Report" >> "${OUTPUTPATH}"
 echo -e "============================================\n" >> "${OUTPUTPATH}"
 
+# The system information report is causing issues with the ollama so it is disabled for now
+# set the -eq check to 1 to always run the system information report if logs are found
+
 # check if there were any logs found
-if [ "$LOGSFOUND" -eq 1 ]; then
+if [ "$LOGSFOUND" -eq 10 ]; then
   # logs found, retreiving system information
 
   COMMANDS=(

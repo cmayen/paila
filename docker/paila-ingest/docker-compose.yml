@@ -18,4 +18,6 @@ services:
       - paila_ingest_data:/.paila-ingest
 volumes:
   paila_ingest_data:
+    external: true
+
 

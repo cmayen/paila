@@ -31,8 +31,9 @@ sudo apt install -y docker.io jq vim wget gpg docker-compose-v2
 
 # Get the AMD GPU installer package from the radeon repo and install 
 # it. (At the time of this document, the version was 6.3.x)
-wget https://repo.radeon.com/amdgpu-install/6.3.4/ubuntu/jammy/amdgpu-install_6.3.60304-1_all.deb
-sudo apt install -y ./amdgpu-install_6.3.60304-1_all.deb
+#wget https://repo.radeon.com/amdgpu-install/6.3.4/ubuntu/noble/amdgpu-install_6.3.60304-1_all.deb
+wget https://repo.radeon.com/amdgpu-install/6.4.2/ubuntu/noble/amdgpu-install_6.4.60402-1_all.deb     
+sudo apt install -y ./amdgpu-install_6.4.60402-1_all.deb     
 sudo amdgpu-install --usecase=dkms
 
  
@@ -41,12 +42,16 @@ sudo amdgpu-install --usecase=dkms
 # repositories, so we need to add the information.
 
 
+# create the keyring directory if it does not exist
+sudo mkdir -p /etc/apt/keyrings
+
+
 # First get the keys:
 wget https://repo.radeon.com/rocm/rocm.gpg.key -O - | gpg --dearmor | sudo tee /etc/apt/keyrings/rocm.gpg > /dev/null
 
 
 # Now add the repo information to the sources:
-echo "deb [arch=amd64 signed-by=/etc/apt/keyrings/rocm.gpg] https://repo.radeon.com/amd-container-toolkit/apt/ jammy main" | sudo tee /etc/apt/sources.list.d/amd-container-toolkit.list
+echo "deb [arch=amd64 signed-by=/etc/apt/keyrings/rocm.gpg] https://repo.radeon.com/amd-container-toolkit/apt/ noble main" | sudo tee /etc/apt/sources.list.d/amd-container-toolkit.list
 
 
 # In order for apt to know the repo exists, we need to update it. We may 

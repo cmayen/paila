@@ -1,0 +1,21 @@
+services:
+  paila-reporter:
+    #image: @cmayen/paila-ingest:v0-0-1
+    image: paila-reporter:latest
+    restart: unless-stopped
+    container_name: paila-reporter
+    command: "./paila-reporter-go"
+    #devices:
+    #  - "/dev/kfd:/dev/kfd"
+    #  - "/dev/dri:/dev/dri"
+    network_mode: "bridge"
+    ports:
+      - "80:80"
+    environment:
+      - "PAILA_OLLAMA_URL=http://192.168.42.209:11434/api/generate"
+    #  - "PAILA_ORIGINS=*"
+    volumes:
+      - paila_ingest_data:/.paila-ingest
+volumes:
+  paila_ingest_data:
+    external: true
