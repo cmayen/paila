@@ -5,6 +5,8 @@ A smart tool that watches systems, understands logs, finds problems, and suggest
 
 🧠  Logs In. Insights Out.  AI-Powered Clarity for Your Servers.
 
+This is an example of a rough weekend experiment from July2025 that will be rewritten with thought out strategies and design patterns.
+
 ---
 
 2025-07-21
